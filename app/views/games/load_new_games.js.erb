@@ -1,0 +1,1 @@
+$(".list").append('<%= escape_javascript(render(:partial=>'loaded_games',:locals=>{:games=>@games,:offset=>@offset})) %>');

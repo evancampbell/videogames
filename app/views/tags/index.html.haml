@@ -1,0 +1,49 @@
+%script{:type=>'text/javascript'}
+  $(function() {
+  $('tr').hover(function() {
+  $(this).css('background-color','#eee');
+  },function() {
+  $(this).css('background-color','white');
+  });
+  $('.destroy').click(function(e) {
+  e.preventDefault();
+  var tag=$(this).attr('id');
+  $.ajax({
+  url:'/tags/destroy',
+  data:'tag='+tag,
+  type:'post',
+  dataType:'json',
+  success:function() {
+  $('#'+tag).parents('tr').fadeOut();
+  }
+  });
+  });
+  });
+
+%h1 Tags
+
+= link_to 'New Tag', new_tag_path
+
+- if !@genres.blank?
+  %h2 Genres
+  = constructtags(@genres)
+
+- if !@platforms.blank?
+  %h2 Platforms
+  =constructtags(@platforms)
+
+- if !@devs.blank?
+  %h2 Developers
+  =constructtags(@devs)
+
+- if !@themes.blank?
+  %h2 Themes
+  = constructtags(@themes)
+
+- if !@misc.blank?
+  %h2 Miscellaneous
+  =constructtags(@misc)
+  
+%br/
+
+= link_to 'New Tag', new_tag_path

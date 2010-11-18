@@ -1,0 +1,13 @@
+%html
+  %head>
+    %title Videogames
+    = render(:partial=>'stylesheets')
+    = javascript_include_tag :defaults
+    = javascript_include_tag "jquery"
+    = csrf_meta_tag
+  %body
+    %ul.topnav
+      %li= link_to 'Tags',tags_path
+      %li= link_to 'Games',games_path
+      %li= link_to 'Browse','/browse'
+    = yield

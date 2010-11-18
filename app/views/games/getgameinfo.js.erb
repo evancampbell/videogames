@@ -1,0 +1,9 @@
+$("#game_description").html('<%= escape_javascript(render(:partial=>'description',:locals=>{:desc=>@desc})) %>');
+<% if !@platforms.nil? %>
+  <% @platforms.each do |p| %>
+    $('input[rel=<%=p%>]').attr('checked','checked');
+  <% end %>
+<% end %>
+<% if !@dev.nil? %>
+  $('input[rel=<%=@dev%>]').attr('checked','checked');
+<% end %>

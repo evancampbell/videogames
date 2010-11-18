@@ -1,0 +1,21 @@
+%h1 Browse
+
+%br/
+
+#browseby
+  %h3 Genre
+  = build_browsing_category(@genres,'genre').html_safe
+  %h3 Platform
+  = build_browsing_category(@platforms,'platform').html_safe
+  %h3 Theme
+  = build_browsing_category(@themes,'theme').html_safe
+  %h3 Developer
+  = build_browsing_category(@devs,'dev').html_safe
+  
+#main
+  %form{:method=>'post',:action=>'/results'}
+    = token_tag
+    %input{:type=>'text',:name=>'query'}
+    %input{:type=>'submit'}
+  = yield :results
+

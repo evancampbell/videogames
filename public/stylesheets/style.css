@@ -1,0 +1,171 @@
+html, body {
+  font-size: 14px;
+  font-family: Segoe,"myriad pro",myriad,arial; }
+
+h2 {
+  border-bottom: 1px solid black;
+  padding-bottom: 3px; }
+
+h4 {
+  display: inline;
+  font-size: 1.7em; }
+
+table {
+  font-size: 1em; }
+
+th {
+  background-color: #ccd2ed; }
+
+#gamelist tr {
+  background-color: #fff; }
+
+#main {
+  margin-left: 200px; }
+
+#searchresults {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0; }
+
+#searchresults li {
+  background-color: #f5f5f5;
+  height: 50px;
+  margin-bottom: 15px;
+  padding: 10px; }
+
+.boldtext {
+  font-weight: bold; }
+
+.italictext {
+  font-style: italic; }
+
+#gameselection {
+  position: absolute;
+  top: 70px;
+  left: 460px; }
+  #gameselection div {
+    margin: 0;
+    padding: 0; }
+  #gameselection ul {
+    list-style: none;
+    line-height: 0.8em;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em; }
+  #gameselection p, #gameselection span {
+    font-size: 0.7em; }
+  #gameselection p {
+    margin: 3px;
+      margin-left: 0px;
+      margin-bottom: 10px;
+    line-height: 1.2em; }
+  #gameselection h3 {
+    margin: 0;
+    color: #1f439a; }
+  #gameselection a {
+    text-decoration: none;
+    color: #1f439a; }
+
+.result_wrap {
+  border-bottom: 1px solid #999;
+  width: 500px;
+  min-height: 28px;
+  cursor: pointer; }
+
+.result_type strong {
+  display: none; }
+
+.platform {
+  font-weight: bold;
+  color: white;
+  display: inline-block;
+  margin-top: 10px;
+  background-color: black;
+  width: auto; }
+
+.release_date {
+  font-weight: bold; }
+
+.score_wrap .label {
+  display: none; }
+
+.metascore {
+  background-color: #67eb63;
+  padding: 2px;
+  font-weight: bold; }
+
+div.basic_stat {
+  display: none; }
+
+p.basic_stat, h3.basic_stat {
+  margin-bottom: 10px;
+  display: block; }
+
+.field {
+  font-size: 0.8em;
+  line-height: 1.2em; }
+
+.even {
+  background-color: #e5e5e5; }
+
+.odd {
+  background-color: white; }
+
+.list {
+  border-collapse: collapse; }
+
+.list td, .list th {
+  font-size: 0.9em;
+  border-bottom: 1px dotted #ccc;
+  height: 23px;
+  line-height: 23px;
+  padding: 0; }
+
+.namecolumn {
+  min-width: 120px; }
+
+.yearcolumn, .ratingcolumn {
+  min-width: 50px; }
+
+.topnav {
+  padding: 0;
+  margin-bottom: 5px;
+  list-style: none; }
+  .topnav li {
+    display: inline; }
+
+.taglist {
+  background-color: #f5f5f5; }
+
+.type2 {
+  color: #2f7c32; }
+
+.type3 {
+  color: #1b5196; }
+
+.type4 {
+  color: #912013; }
+
+.type5 {
+  color: #927e00; }
+
+.parenttag {
+  display: none; }
+
+#browseby {
+  float: left;
+  background-color: #f5f5f5; }
+
+.browsing_category {
+  list-style: none;
+  margin-left: 5px;
+  padding-left: 5px;
+  font-size: 0.9em;
+  line-height: 1.2em; }
+
+.browsing_category li ul a {
+  color: #555; }
+
+#searchfield {
+  width: 300px;
+  font-size: 1.4em; }

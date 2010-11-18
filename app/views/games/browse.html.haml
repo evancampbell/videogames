@@ -1,0 +1,6 @@
+= content_for :results do
+  - if @results.any?
+    - @results.each do |r|
+      %ul#searchresults
+        %li
+          %h4= r.name 

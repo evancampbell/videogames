@@ -1,0 +1,5 @@
+= content_for :results do
+  %ul#searchresults
+    - @results.each do |k,v|
+      %li 
+        %h4= k.name

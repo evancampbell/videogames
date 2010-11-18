@@ -1,0 +1,129 @@
+%script{:type=>'text/javascript'}
+  $(function() {
+  $('.searchgame').click(function() {
+  $.ajax({
+  url:'/getsearchresults',
+  type:'post',
+  data:'q='+$('#game_name').val()+'&site='+$(this).attr('id')
+  });
+  });
+  });
+
+  $(function() {
+  $('.tagbox').change(function() {
+  $(this).siblings('.parenttag').attr('checked','checked');
+  });
+  $('#parentselect').change(function() {
+  var val=$(this).val();
+  $.ajax({
+  url:'/getparenttags',
+  type:'post',
+  data:'parent='+val
+  });
+  });
+  $('.product_title a').live('click',function(e) {
+  e.preventDefault();
+  });
+  $('.result_wrap').live('click',function(e) {
+  e.preventDefault();
+  href=$(this).find('.product_title a').attr('href');
+  $.ajax({
+  url:'/getgameinfo',
+  data:'href='+href+'&site=metacritic',
+  type:'post'
+  });
+  date=$(this).find('.release_date .data').html();
+  name=$(this).find('.product_title a').html();
+  rating=$(this).find('.metascore').html();
+  if (date.length!=0) {
+  year=date.slice(-4);
+  $('#game_year').val(year);
+  }
+  if (rating.length!=0) {
+  $('#game_rating').val(rating);
+  }
+  $('#game_name').val(name);
+  });
+  $('#gameselection .body table tr td a').live('click',function(e) {
+  e.preventDefault();
+  });
+  $('.body table tr').live('click',function() {
+  $('#game_name').val($(this).find('a').html());
+  $('#game_rating').val(Math.round(parseFloat($(this).children('td').eq(3).find('b').html().slice(0,5))));
+  $('#game_year').val($.trim($(this).children('td').eq(2).html()).slice(-4));
+  var href=$(this).find('a').attr('href');
+  $.ajax({
+  url:'/getgameinfo',
+  data:'href='+href+'&site=gamerankings',
+  type:'post'
+  });
+  });
+  });
+  
+= form_for(@game) do |f|
+  - if @game.errors.any? 
+    #error_explanation
+      %h2 #{pluralize(@game.errors.count, "error")} prohibited this game from being saved:
+
+      %ul
+      - @game.errors.full_messages.each do |msg|
+        %li= msg
+  #gameselection
+  .field
+    = f.label :name
+    %br/
+    = f.text_field :name
+    %input{:type=>'button',:class=>'searchgame',:id=>'metacritic',:value=>'Metacritic'}
+    %input{:type=>'button',:class=>'searchgame',:id=>'gamerankings',:value=>'GameRankings'}
+  .field
+    = f.label :year
+    %br/
+    = f.text_field :year
+  .field
+    = f.label :rating
+    %br/
+    = f.text_field :rating 
+  .field
+    #{ f.check_box :type_of } Series
+  .field
+    = f.label :parent
+    %br/
+    %select{:name=>"game[parent]",:id=>"parentselect"}
+      %option{:value=>0} ---
+      - @parents.each do |p|
+        %option{:value=>p.id}= p.name
+  .field
+    = f.label :description
+    %br/
+    = f.text_area :description
+    %br/
+    %h2.boldtext Genres
+    %table
+      %tr
+        = buildtags(@genres,@game).html_safe
+    %br/
+    %br/
+    %h2.boldtext Platforms
+    %table
+      %tr
+        = buildtags(@platforms,@game).html_safe
+    %br/
+    %br/
+    %h2.boldtext Developers
+    %table
+      %tr
+        = buildtags(@devs,@game).html_safe
+    %br/
+    %br/
+    %h2.boldtext Themes
+    %table
+      %tr
+        = buildtags(@themes,@game).html_safe
+    %br/
+    %br/
+    %h2 Miscellaneous
+    %table
+      %tr
+        = buildtags(@misc,@game).html_safe
+  .actions
+    = f.submit

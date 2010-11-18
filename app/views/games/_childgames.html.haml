@@ -1,0 +1,11 @@
+- games.each do |g|
+  %tr{:class=>"#{g.parent}",:rel=>g.id}
+    %td &raquo;&nbsp;&nbsp;&nbsp;#{g.name}
+    %td= g.year
+    %td= g.rating
+    %td
+      =gettags(g).html_safe
+    %td= link_to 'Show', g
+    %td= link_to 'Edit', edit_game_path(g)
+    %td= link_to 'Destroy', g, :confirm => 'Are you sure?', :method => :delete
+

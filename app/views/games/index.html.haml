@@ -1,0 +1,80 @@
+%script{:type=>'text/javascript'}
+  $(function() {
+  $('tr').hover(function() {
+  $(this).css('background-color','#eee');
+  },function() {
+  $(this).css('background-color','white');
+  });
+  $('.destroy').click(function(e) {
+  e.preventDefault();
+  var game=$(this).attr('id');
+  $.ajax({
+  url:'/games/destroy',
+  data:'game='+game,
+  type:'post',
+  dataType:'json',
+  success:function() {
+  $('#'+game).parents('tr').fadeOut();
+  }
+  });
+  });
+  $(window).scroll(function() {
+  if ($(window).scrollTop()==$(document).height()-$(window).height()) {
+  $.ajax({
+  url:'/loadnewgames',
+  data:'id='+$('.lastgame:last').attr('rel')+'&offset='+$('.lastgame:last').attr('id').substring(2),
+  type:'post'
+  });
+  }
+  });
+  });
+  
+
+%h1 Games
+
+= link_to 'New Game', new_game_path
+
+%br/
+%br/
+
+%table.list
+  %tr
+    %th.namecolumn Name
+    %th.yearcolumn Year
+    %th.ratingcolumn Rating
+    %th Tags
+    %th{:colspan=>3}
+    
+  - @games.each do |game|
+    - if game.type_of==1
+      - if game==@games.last
+        %tr{:class=>'parent lastgame',:rel=>game.id,:id=>"tr20"}
+      - else
+        %tr{:class=>'parent',:rel=>game.id}
+      %td.namecolumn.boldtext= game.name
+      %td{:colspan=>2}
+      %td.boldtext
+        =gettags(game).html_safe
+      %td= link_to 'Show&nbsp;'.html_safe, game
+      %td= link_to 'Edit&nbsp;'.html_safe, edit_game_path(game)
+      %td
+        %a{:class=>'destroy',:id=>game.id,:href=>'#'} Destroy
+      = getchildgames game.id 
+    - if game.type_of==0
+      - if game==@games.last
+        %tr{:class=>'lastgame',:rel=>game.id,:id=>"tr20"}
+      - else
+        %tr{:rel=>game.id}
+      %td= game.name
+      %td= game.year
+      %td= game.rating
+      %td 
+        =gettags(game).html_safe
+      %td= link_to 'Show&nbsp;'.html_safe, game
+      %td= link_to 'Edit&nbsp;'.html_safe, edit_game_path(game)
+      %td
+        %a{:class=>'destroy',:id=>game.id,:href=>'#'} Destroy
+
+%br/
+
+= link_to 'New Game', new_game_path

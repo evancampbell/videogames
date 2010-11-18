@@ -1,0 +1,13 @@
+%script{:type=>'text/javascript'}
+  $(function() {
+  $('.tags').each(function() {
+  var val=$(this).val();
+  $('.tagbox').val(val).attr('selected','selected');
+  });
+  });
+
+%h1 New game
+
+= render 'form'
+
+= link_to 'Back', games_path
