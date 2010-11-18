@@ -38,6 +38,7 @@ class GamesController < ApplicationController
           pvalues.push(v)
         end
       end
+      @tags=[]
       pvalues.each do |p|
         if p==pvalues.first
           @results=Tag.find(p).games
@@ -46,6 +47,7 @@ class GamesController < ApplicationController
           derp.each {|d| puts d.name }
           @results=@results&derp
         end
+        @tags.push(Tag.find(p))
       end
     end
     @misc,@genres,@platforms=Tag.find_types(1..3,'children')

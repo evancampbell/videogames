@@ -1,5 +1,10 @@
 = content_for :results do
   - if @results.any?
+    - @tags.each do |t|
+      - if t==@tags.last
+        %h3= t.name
+      - else
+        %h3 #{t.name} /
     - @results.each do |r|
       %ul#searchresults
         %li
