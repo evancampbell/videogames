@@ -1,0 +1,74 @@
+= content_for :results do
+  %script{:type=>'text/javascript'}
+    $(function() {
+    $('.viewcommon').click(function(e) {
+    e.preventDefault();
+    var thisgame=$(this).attr('rel');
+    var sourcegame=#{@game}
+    $.ajax({
+    url:'/getcommontags/'+sourcegame+'/'+thisgame,
+    dataType:'html',
+    success:function(data) {
+    $('.viewcommon[rel='+thisgame+']').html('View all tags').attr('class','viewalltags').after(data);
+    }
+    });
+    });
+    $('.viewalltags').live('click',function() {
+    var id=$(this).attr('rel');
+    $.ajax({
+    url:'/games/getalltags/'+id,
+    dataType:'html',
+    success:function(data) {
+    $('.viewalltags[rel='+id+']').parent().html(data);
+    }
+    });
+    });
+    $('.expandinfo').toggle(function(e) {
+    e.preventDefault();
+    $(this).next('.expanded_info').show();
+    if ($(this).next('.expanded_info').html()=='') {
+    $.ajax({
+    url:'/games/getfullinfo/'+$(this).attr('rel')
+    });
+    }
+    $(this).html('Collapse');
+    },function(e) {
+    e.preventDefault();
+    var next=$(this).next('.expanded_info');
+    next.hide();
+    $(this).html('Expand');
+    });
+    });
+    
+  %h2 Games
+  %ul.searchresults
+    - @indiv.each do |i|
+      %li
+        %h4= i[:game].name
+        - if i[:game].rating != nil
+          %h4 &nbsp;-&nbsp;
+          %h4.rating= i[:game].rating
+        %br/
+        %span.boldtext Similarity: 
+        #{i[:sim]}/#{@full}
+        %br/
+        %span.boldtext Relevance: 
+        = i[:relevance]
+        .fullinfo{:rel=>i[:game].id}
+          %a{:href=>'#',:class=>'expandinfo',:rel=>i[:game].id} Expand
+          .expanded_info
+        .commontags
+          %a{:href=>'#',:class=>'viewcommon',:rel=>i[:game].id} View common tags
+  %h2 Series
+  %ul.searchresults
+    - @series.each do |s|
+      %li
+        %h4 #{s[:game].name}
+        - if s[:game].rating != nil
+          &nbsp;-&nbsp;
+          %h4.rating= s[:game].rating
+        %br/
+        %span.boldtext Similarity: #{s[:sim]}/#{@full}
+        %br/
+        %span.boldtext Relevance: #{s[:relevance]}
+        %br/

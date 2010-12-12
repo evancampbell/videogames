@@ -1,0 +1,8 @@
+- tags.each do |t|
+  %tr{:class=>"#{t.parent}"}
+    %td &raquo;&nbsp;&nbsp;&nbsp;#{t.name}
+    %td= t.description
+    %td= link_to 'View&nbsp;'.html_safe, t
+    %td= link_to '&nbsp;Edit&nbsp;'.html_safe, edit_tag_path(t)
+    %td
+      %a{:class=>'destroy',:id=>t.id,:href=>'#'} &nbsp;Destroy

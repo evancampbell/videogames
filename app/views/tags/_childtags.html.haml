@@ -1,7 +1,0 @@
-- tags.each do |t|
-  %tr{:class=>"#{t.parent}"}
-    %td &raquo;&nbsp;&nbsp;&nbsp;#{t.name}
-    %td= t.description
-    %td= link_to 'Show', t
-    %td= link_to 'Edit', edit_tag_path(t)
-    %td= link_to 'Destroy', t, :method=>:delete, :confirm => 'Are you sure?'

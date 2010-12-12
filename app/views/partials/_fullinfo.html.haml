@@ -1,0 +1,33 @@
+%span
+  %span.boldtext Genre: 
+  - genres.each do |g|
+    - if g==genres.last
+      = g.name
+    - else
+      #{g.name},
+%br/
+%span
+  %span.boldtext Developer:
+  - devs.each do |d|
+    - if d==devs.last
+      = d.name
+    - else
+      #{d.name},
+%br/
+%span
+  %span.boldtext Platform:
+  - platforms.each do |p|
+    - if p==platforms.last
+      = p.name
+    - else
+      #{p.name},
+%br/
+%span
+  %span.boldtext Themes:
+  - themes.each do |t|
+    - if t==themes.last
+      = t.name
+    - else
+      #{t.name},
+%br/
+%p= game.description

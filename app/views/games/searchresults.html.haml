@@ -1,5 +1,13 @@
 = content_for :results do
-  %ul#searchresults
-    - @results.each do |k,v|
+  %h2 Games
+  %ul.searchresults
+    - @indiv.each do |k,v|
       %li 
         %h4= k.name
+        %h4{:class=>"#{get_rating_color(v,@full)}"} #{v}/#{@full}
+  %h2 Series
+  %ul.searchresults
+    - @series.each do |k,v|
+      %li
+        %h4= k.name
+        %h4{:class=>"#{get_rating_color(v,@full)}"} #{v}/#{@full}

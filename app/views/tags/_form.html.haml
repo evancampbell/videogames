@@ -1,3 +1,20 @@
+%script{:type=>'text/javascript'}
+  $(function() {
+  $('.parent').hide();
+  $('#tag_type_id').change(function() {
+  $('.parent').hide().children('select').attr('disabled','disabled');
+  if ($(this).val()==2) {
+  $('#genre_type').show().children('select').attr('disabled','');
+  } else if ($(this).val()==3) {
+  $('#platform_type').show().children('select').attr('disabled','');
+  } else if ($(this).val()==4) {
+  $('#dev_type').show().children('input').attr('disabled','');
+  } else if ($(this).val()==5) {
+  $('#theme_type').show().children('select').attr('disabled','');
+  }
+  });
+  });
+  
 = form_for(@tag) do |f| 
   - if @tag.errors.any?
     #error_explanation
@@ -15,13 +32,29 @@
     = f.label :type
     %br/
     = collection_select :tag,:type_id,@types,:id,:name
-  .field
+  .field.parent#theme_type
     %label Parent
     %br/
-    %select{:name=>"tag[parent]"}
-      %option{:value=>0} ---
-      - @tags.each do |t|
+    %select{:name=>"tag[parent]",:disabled=>'disabled'}
+      %option{:value=>0} None
+      - @theme_types.each do |t|
         %option{:value=>t.id}= t.name
+  .field.parent#genre_type
+    %label Parent
+    %br/
+    %select{:name=>"tag[parent]",:disabled=>'disabled'}
+      %option{:value=>0} None
+      - @genre_types.each do |g|
+        %option{:value=>g.id}= g.name
+  .field.parent#platform_type
+    %label Parent
+    %br/
+    %select{:name=>"tag[parent]",:disabled=>'disabled'}
+      %option{:value=>0} None
+      -@platform_types.each do |p|
+        %option{:value=>p.id}= p.name
+  .field.parent#dev_type
+    %input{:type=>'checkbox',:name=>"tag[parent]",:value=>@indie,:disabled=>'disabled'} Independent
   .field
     = f.label :description
     %br/

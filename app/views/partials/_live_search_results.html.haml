@@ -1,0 +1,7 @@
+%ul
+  - search.each_hit_with_result do |h,g|
+    %li
+      - if g.type_of==1
+        %a{:class=>'boldtext nothover',:href=>'#'} #{g.name} (series)
+      - else
+        %a{:class=>'nothover',:href=>'#'}= g.name

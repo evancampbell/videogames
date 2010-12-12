@@ -4,12 +4,17 @@ class Tag < ActiveRecord::Base
   has_many :reverse_associations,:foreign_key=>"game_id",:class_name=>"Association"
   has_many :games,:through=>:associations
   belongs_to :type
-  attr_accessible :name,:type_of,:description,:parent,:children
+  attr_accessible :name,:type_id,:description,:parent,:children
   
-  def self.find_types(types,mode)
+  def self.find_types(mode=0,conditions='and parent=0')
     a=[]
-    types.to_a.each do |t|
-      items=self.order(mode+" ASC").find(:all,:conditions=>["type_id=? and parent=0",t])
+    mode==1 ? ordering='name' : ordering='children'
+    for t in (1..5)
+      if mode==0 and t==4
+        items=self.order('name ASC').find(:all,:conditions=>["type_id=? "+conditions,t])
+      else
+        items=self.order(ordering+" ASC").find(:all,:conditions=>["type_id=? "+conditions,t])
+      end
       a.push(items)
     end
     return a

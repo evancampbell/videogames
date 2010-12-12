@@ -1,0 +1,62 @@
+%script{:type=>'text/javascript'}
+  $(function() {
+  $('.dissociate').click(function(e) {
+  e.preventDefault();
+  var game=$(this).attr('rel');
+  $('.dissociate[parent='+game+']').click();
+  $.ajax({
+  url:'/dissociate/'+game+"/#{@tag.id}",
+  type:'get',
+  dataType:'json',
+  success:function() {
+  $("#"+game).fadeOut();
+  }
+  });
+  });
+  $('#gameselectbutton').click(function() {
+  $.ajax({
+  url:'/associate',
+  data:"tag=#{@tag.id}&game="+$('#gameselect').val(),
+  type:'post',
+  dataType:'html',
+  success:function(data){
+  $('#status').html(data);
+  $('#status span').fadeIn().delay(2000).fadeOut();
+  }
+  });
+  });
+  });
+  
+%p#notice= notice
+
+%h1= @tag.name
+
+%p= @tag.description
+
+%h3 Associated games
+%table.list
+  - @games.each do |g|
+    %tr{:id=>g.id}
+      - if g.type_of==1
+        %td{:class=>'boldtext'}= g.name
+        %td= link_to 'Dissociate series','#',:class=>'dissociate',:rel=>g.id
+      - else 
+        %td= g.name
+        %td= link_to 'Dissociate game','#',:class=>'dissociate',:rel=>g.id
+    = getchildgames(g.id)
+%br/
+%h3 New association
+%br/
+%select{:name=>"game",:id=>"gameselect"}
+  %option{:value=>0} ---
+  - @allgames.each do |g|
+    - if g.parent>0
+      %option{:value=>g.id} &nbsp;&nbsp;&nbsp;#{g.name}
+    - else
+      %option{:value=>g.id,:class=>(g.type_of==1 ? 'boldtext': '')}= g.name
+%input{:type=>'button',:id=>'gameselectbutton',:value=>'Update'}
+#status{:style=>'height:20px;'}
+%br/
+= link_to 'Edit', edit_tag_path(@tag) 
+|
+= link_to 'Back', tags_path

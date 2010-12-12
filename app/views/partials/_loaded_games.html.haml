@@ -1,0 +1,27 @@
+- games.each do |game|
+  - if game.type_of==1
+    %tr{:class=>( game==games.last ? 'parent lastgame' : 'parent'),:rel=>game.id,:id=>( game==games.last ? "tr#{offset}" : "")}
+      %td.checkcolumn
+        %input{:type=>'checkbox',:name=>'mass[]',:value=>game.id}
+      %td.namecolumn.boldtext= game.name
+      %td{:colspan=>2}
+      %td.boldtext
+        =gettags(game).html_safe
+      %td= link_to 'Show&nbsp;'.html_safe, game
+      %td= link_to 'Edit&nbsp;'.html_safe, edit_game_path(game)
+      %td
+        %a{:class=>'destroy',:id=>game.id,:href=>'#'} Destroy
+    = getchildgames game.id 
+  - if game.type_of==0
+    %tr{:class=>( game==games.last ? 'lastgame' : ''),:rel=>game.id,:id=>( game==games.last ? "tr#{offset}" : "")}
+      %td.checkcolumn
+        %input{:type=>'checkbox',:name=>'mass[]',:value=>game.id}
+      %td= game.name
+      %td= game.year
+      %td= game.rating
+      %td 
+        =gettags(game).html_safe
+      %td= link_to 'Show&nbsp;'.html_safe, game
+      %td= link_to 'Edit&nbsp;'.html_safe, edit_game_path(game)
+      %td
+        %a{:class=>'destroy',:id=>game.id,:href=>'#'} Destroy

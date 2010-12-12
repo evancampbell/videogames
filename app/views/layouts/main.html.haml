@@ -1,34 +1,65 @@
+!!! 5
 %html
-  %head>
+  %head
+    
     %title Videogames
-    = render(:partial=>'stylesheets')
+    = render(:partial=>'partials/stylesheets')
     = javascript_include_tag :defaults
     = javascript_include_tag "jquery"
+    = javascript_include_tag "livesearch"
+    
     = csrf_meta_tag
-  %body
-    %ul.topnav
-      %li= link_to 'Tags',tags_path
-      %li= link_to 'Games',games_path
-      %li= link_to 'Search','/search'
-      %li= link_to 'Browse','/browse'
+    %script{:type=>'text/javascript'}
+      $(function() {
+      $('#searchfield').keyup(function(e) {
+      if (e.keyCode != 38 && e.keyCode != 40) {
+      $.ajax({
+      url:'/games/livesearch/'+$(this).val(),
+      success:function() {
+      $('#live_search_results ul li a').each(function(i) {
+      asdf=$(this).html();
+      dfsa=asdf;
+      $(this).data('number',i);
+      });
+      }
+      });
+      }
+      });
+      $('#live_search_results ul li a').live('click',function(e) {
+      e.preventDefault();
+      var game=$(this).html();
+      $('#searchfield').val(game);
+      $('#recommend_submit').click();
+      $('#live_search_results ul').remove();
+      });
+
+      });
       
-%h1 Browse
+  %body
+    #wrapper
+      %ul.topnav
+        %li= link_to 'Tags',tags_path
+        %li= link_to 'Games',games_path
+        %li= link_to 'Search','/search'
+        %li= link_to 'Browse','/browse'
+      
+      %h1 Browse
 
-%br/
+      %br/
 
-#browseby
-  %h3 Genre
-  = build_browsing_category(@genres,'genre').html_safe
-  %h3 Platform
-  = build_browsing_category(@platforms,'platform').html_safe
-  %h3 Theme
-  = build_browsing_category(@themes,'theme').html_safe
-  %h3 Developer
-  = build_browsing_category(@devs,'dev').html_safe
-  
-#main
-  %form{:method=>'get',:action=>'/results'}
-    %input{:type=>'text',:name=>'query',:id=>'searchfield'}
-    %input{:type=>'submit',:value=>'Search'}
-  = yield :results
+      #browseby
+        %h3 Genre
+        = build_browsing_category(@genres,'genre','browsing_category').html_safe
+        %h3 Platform
+        = build_browsing_category(@platforms,'platform','browsing_category').html_safe
+        %h3 Theme
+        = build_browsing_category(@themes,'theme','browsing_category').html_safe
+        
+      #main
+        %form{:method=>'get',:action=>'/results',:id=>'recommend_form'}
+          %input{:type=>'text',:name=>'query',:id=>'searchfield',:autocomplete=>'off'}
+          #submit_container
+            %input{:type=>'submit',:value=>'Search',:id=>'recommend_submit'}
+        #live_search_results
+        = yield :results
 

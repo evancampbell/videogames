@@ -1,0 +1,4 @@
+- games.each do |g|
+  %tr{:id=>g.id}
+    %td &raquo;&nbsp;&nbsp;&nbsp;#{g.name}
+    %td= link_to 'Dissociate game','#',:class=>'dissociate',:rel=>g.id,:parent=>g.parent

@@ -1,11 +1,15 @@
 = content_for :results do
+  - if @tags.any?
+    =link_to '<h3 id="reset">Reset</h3>'.html_safe,'/browse',:id=>'reset_link'
+  - @tags.each do |t|
+    - if t==@tags.last
+      %h3= t.name
+      -if @subtags.any?
+        = build_browsing_category(@subtags,@type,'browsing_subtags').html_safe
+    - else
+      %h3 #{t.name} /
   - if @results.any?
-    - @tags.each do |t|
-      - if t==@tags.last
-        %h3= t.name
-      - else
-        %h3 #{t.name} /
     - @results.each do |r|
-      %ul#searchresults
+      %ul.searchresults
         %li
           %h4= r.name 

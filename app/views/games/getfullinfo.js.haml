@@ -1,0 +1,1 @@
+$(".fullinfo[rel=#{@game.id}] .expanded_info").append("#{escape_javascript(render(:partial=>'partials/fullinfo',:locals=>{:game=>@game,:misc=>@misc,:platforms=>@platforms,:genres=>@genres,:devs=>@devs,:themes=>@themes})) }");

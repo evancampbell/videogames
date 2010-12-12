@@ -1,5 +1,7 @@
 - games.each do |g|
   %tr{:class=>"#{g.parent}",:rel=>g.id}
+    %td.checkcolumn
+      %input{:type=>'checkbox',:name=>'mass[]',:value=>g.id}
     %td &raquo;&nbsp;&nbsp;&nbsp;#{g.name}
     %td= g.year
     %td= g.rating

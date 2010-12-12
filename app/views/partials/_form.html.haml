@@ -2,23 +2,25 @@
   $(function() {
   $('.searchgame').click(function() {
   $.ajax({
-  url:'/getsearchresults',
-  type:'post',
-  data:'q='+$('#game_name').val()+'&site='+$(this).attr('id')
+  url:'/games/getsearchresults/'+$('#game_name').val()+'/'+$(this).attr('id'),
+  type:'get',
   });
   });
   });
 
   $(function() {
   $('.tagbox').change(function() {
-  $(this).siblings('.parenttag').attr('checked','checked');
+  if ($(this).is(':checked')) {
+  $(this).parents('table').siblings('.parenttag').attr('checked',true);
+  } else {
+  $(this).parents('table').siblings('.parenttag').attr('checked',false);
+  }
   });
   $('#parentselect').change(function() {
   var val=$(this).val();
   $.ajax({
-  url:'/getparenttags',
-  type:'post',
-  data:'parent='+val
+  url:'/games/getparenttags/'+val,
+  type:'get'
   });
   });
   $('.product_title a').live('click',function(e) {
@@ -28,9 +30,9 @@
   e.preventDefault();
   href=$(this).find('.product_title a').attr('href');
   $.ajax({
-  url:'/getgameinfo',
-  data:'href='+href+'&site=metacritic',
-  type:'post'
+  url:'/games/getgameinfo',
+  type:'post',
+  data:'href='+href+'&site=metacritic'
   });
   date=$(this).find('.release_date .data').html();
   name=$(this).find('.product_title a').html();
@@ -43,21 +45,49 @@
   $('#game_rating').val(rating);
   }
   $('#game_name').val(name);
+  $('#game_name').focus();
+  $('#game_name').blur();
   });
   $('#gameselection .body table tr td a').live('click',function(e) {
   e.preventDefault();
   });
   $('.body table tr').live('click',function() {
   $('#game_name').val($(this).find('a').html());
+  $('#game_name').focus();
+  $('#game_name').blur();
   $('#game_rating').val(Math.round(parseFloat($(this).children('td').eq(3).find('b').html().slice(0,5))));
   $('#game_year').val($.trim($(this).children('td').eq(2).html()).slice(-4));
   var href=$(this).find('a').attr('href');
   $.ajax({
-  url:'/getgameinfo',
-  data:'href='+href+'&site=gamerankings',
-  type:'post'
+  url:'/games/getgameinfo',
+  type:'post',
+  data:'href='+href+'&site=gamerankings'
   });
   });
+  $('#game_name').blur(function () {
+  $.ajax({
+  url:'/games/check_if_exists/'+$(this).val(),
+  type:'get',
+  dataType:'text',
+  success:function(text) {
+  $('#exists').html(text);
+  }
+  });
+  });
+  $('#gamespot_search').click(function() {
+  $.ajax({
+  url:'/games/getgamespotlink/'+$('#game_name').val()
+  });
+  });
+  $('.tagname').click(function() {
+  var checkbox=$(this).prev('input');
+  if (checkbox.attr('checked')==false) {
+  checkbox.attr('checked',true).change();
+  } else {
+  checkbox.attr('checked',false).change();
+  }
+  });
+  
   });
   
 = form_for(@game) do |f|
@@ -69,34 +99,42 @@
       - @game.errors.full_messages.each do |msg|
         %li= msg
   #gameselection
-  .field
+  .field{:style=>'margin-bottom:0;'}
     = f.label :name
     %br/
     = f.text_field :name
     %input{:type=>'button',:class=>'searchgame',:id=>'metacritic',:value=>'Metacritic'}
     %input{:type=>'button',:class=>'searchgame',:id=>'gamerankings',:value=>'GameRankings'}
-  .field
+  #exists
+  .field{:style=>'display:inline-block;'}
     = f.label :year
     %br/
-    = f.text_field :year
-  .field
+    = f.text_field (:year,:size=>5)
+  .field{:style=>'display:inline-block;'}
     = f.label :rating
     %br/
-    = f.text_field :rating 
-  .field
-    #{ f.check_box :type_of } Series
-  .field
+    = f.text_field (:rating,:size=>5)
+  .field{:style=>'display:inline-block;'}
     = f.label :parent
     %br/
     %select{:name=>"game[parent]",:id=>"parentselect"}
       %option{:value=>0} ---
       - @parents.each do |p|
-        %option{:value=>p.id}= p.name
+        %option{:value=>p.id, :selected=> p.id==@game.parent }= p.name
+  .field
+    #{ f.check_box :type_of } Series
+  
   .field
     = f.label :description
     %br/
-    = f.text_area :description
+    = f.text_area( :description,:cols=>50,:rows=>10)
     %br/
+    %h2.boldtext Links
+    #select_links
+      #gamespot_selection
+        %ul
+      %input{:type=>'text',:class=>'linkfield'}
+      %input{:type=>'button',:value=>'Gamespot',:id=>'gamespot_search'}
     %h2.boldtext Genres
     %table
       %tr
